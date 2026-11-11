@@ -1,5 +1,5 @@
 """Publish a read-only snapshot of the boards for the web showcase
-(rh_wallet_finder/web, hosted on Vercel).
+(web/, hosted on Vercel with Root Directory set to web).
 
 This computer stays the engine: after each ranking the worker uploads one
 gzipped JSON file to the Vercel project's Blob store, and the site shows it.
@@ -12,7 +12,7 @@ Two ways up:
     the gzipped file with the key; the site's own function writes it to the
     project's Blob store with Vercel's OIDC credential. Nothing to renew.
   - straight to Blob (VERCEL_BLOB_TOKEN), as @vercel/blob's put() does it (api
-    version 13): PUT https://vercel.com/api/blob/?pathname=rhwf/snapshot.json.gz
+    version 13): PUT https://vercel.com/api/blob/?pathname=elywf/snapshot.json.gz
     with authorization: Bearer <BLOB_READ_WRITE_TOKEN>, x-vercel-blob-access, ...
     The tokens the Vercel dashboard shows for a store now expire, so this one
     stops working after a while.

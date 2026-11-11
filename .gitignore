@@ -1,6 +1,11 @@
 .env
+.env.*
+!.env.example
 .venv/
 data/
+data/*.db
+data/worker.lock
+logs/
 __pycache__/
 *.pyc
 .streamlit/secrets.toml

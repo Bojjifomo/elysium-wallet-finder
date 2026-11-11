@@ -1,5 +1,5 @@
 // The latest snapshot of the boards, as the Wallet Finder on the Mac published it
-// (rh_wallet_finder/publish.py, through api/publish or straight to Blob).
+// (publish.py, through api/publish or straight to Blob).
 const { readSnapshot, send, sendBig } = require("./_blob");
 
 module.exports = async (req, res) => {

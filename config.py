@@ -1,6 +1,6 @@
 """Settings, contract addresses and the .env file.
 
-Keys live in elysium_wallet_finder/.env (git-ignored), never in the repo: the
+Keys live in .env next to this file (git-ignored), never in the repo: the
 repo is public. The app's Settings tab writes the same file.
 
 Addresses were checked against the public RPC (chain id 99901) on 10 Nov 2026:

@@ -1,4 +1,4 @@
-"""Offline tests for the pool finder: python3 -m unittest discover -s rh_wallet_finder/tests"""
+"""Offline tests for the pool finder: python3 -m unittest discover -s tests"""
 import sys
 import time
 import unittest

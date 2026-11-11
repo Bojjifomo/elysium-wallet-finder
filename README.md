@@ -7,9 +7,12 @@ unrealized PnL, ROI, win rate, profit factor, drawdown, copier, style, Real PnL,
 preset, papan 24 jam, twin finder, watchlist, pool finder (GeckoTerminal),
 hasil LP per pool, dan etalase web di `web/`.
 
-Beda sama `rh_wallet_finder/`: ini chain-nya Elysium, gas-nya **HYPE**,
+Beda sama RH Wallet Finder: ini chain-nya Elysium, gas-nya **HYPE**,
 stable-nya **USDC**, dan yang di-index bukan cuma Uniswap v4. v3 ikut, karena
 chain-nya masih baru dan likuiditasnya belum tentu duduk di satu venue.
+
+Repo ini berdiri sendiri. Dulu isinya folder `elysium_wallet_finder/` di
+dalam Capstone1; sekarang folder itu jadi root repo ini.
 
 Semua angka dari RPC lu (default-nya RPC publik Elysium). Butuh Python 3.10+.
 Streamlit di-install sendiri ke `.venv` pas lu double-click launchernya
@@ -18,18 +21,31 @@ sendiri cuma pakai standard library.
 
 ## Jalanin
 
-1. Ambil repo (`git pull`, atau clone).
-2. Double-click **`elysium_wallet_finder/Buka Wallet Finder.command`**.
-   Pertama kali dia bikin `.venv` di folder ini (kalau lu udah bikin sendiri,
+1. Clone, terus masuk ke folder-nya:
+   ```bash
+   git clone https://github.com/Bojjifomo/elysium-wallet-finder.git
+   cd elysium-wallet-finder
+   ```
+2. Contoh env (opsional — RPC publik udah cukup buat mulai):
+   ```bash
+   cp .env.example .env
+   ```
+   `.env` nggak ikut ke git. Jangan di-commit.
+3. Double-click **`Buka Wallet Finder.command`** di root repo ini.
+   Pertama kali dia bikin `.venv` di folder yang sama (kalau lu udah bikin sendiri,
    yang itu yang dipakai), install Streamlit ke situ, terus browser kebuka ke
-   **http://localhost:8502** (8501 dipakai RH Wallet Finder, biar dua-duanya
-   bisa nyala bareng). Path yang ada spasinya (misalnya
-   `/Volumes/SSD 1TB/work/Capstone1`) aman. Dari Terminal sama aja: jalankan
-   file `.command` itu. Jangan `pip install` ke Python Homebrew — itu yang
-   keluar `externally-managed-environment`.
+   **http://localhost:8502** (8501 sering kepake app lain, biar nggak tabrakan).
+   Path yang ada spasinya aman. Dari Terminal sama aja:
+   ```bash
+   bash "Buka Wallet Finder.command"
+   ```
+   Jangan `pip install` ke Python Homebrew — itu yang keluar
+   `externally-managed-environment`.
    Kalau install-nya gagal, jendela Terminal-nya nunggu (Tekan Enter), nggak
    langsung ilang.
-3. RPC publik `https://rpc.elysium.kinetiq.xyz` udah jadi default, jadi lu bisa
+   Tanpa launcher, dari root repo: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`
+   terus `.venv/bin/python finder.py`.
+4. RPC publik `https://rpc.elysium.kinetiq.xyz` udah jadi default, jadi lu bisa
    langsung sync tanpa isi apa-apa. Kalau mau RPC sendiri (Alchemy lebih enak
    buat history panjang): tab **Settings**, atau
    ```bash
@@ -37,9 +53,8 @@ sendiri cuma pakai standard library.
    ```
    Key Alchemy doang (tanpa `https://`) jadi
    `https://elysium-mainnet.g.alchemy.com/v2/<key>`.
-   Link-nya disimpen di `elysium_wallet_finder/.env` (gitignored, **jangan**
-   di-commit: repo ini public).
-4. Biarin Terminal-nya kebuka. Sync jalan di background:
+   Link-nya disimpen di `.env` (gitignored, **jangan** di-commit).
+5. Biarin Terminal-nya kebuka. Sync jalan di background:
    - history default **dari blok 1** (`BACKFILL_DAYS=0`), bukan 30 hari.
      Genesis chain 19 Okt 2026; mainnet publik 9 Nov 2026. Uniswap v4 baru
      rame beberapa hari sebelum tanggal ini, jadi backfill-nya nggak sepanjang
@@ -47,13 +62,12 @@ sendiri cuma pakai standard library.
    - tiap beberapa segmen langsung di-score.
    - abis history keisi, update sendiri tiap 5 menit.
 
-Database-nya `elysium_wallet_finder/data/wallets.db`, pisah dari RH Wallet Finder.
+Database-nya `data/wallets.db` (ikut `.gitignore`, nggak naik ke git).
 
 ## Command
 
 ```bash
-cd elysium_wallet_finder
-python3 finder.py                         # app + sync
+python3 finder.py                         # app + sync, dari root repo
 python3 finder.py worker                  # sync + skor, tanpa UI
 python3 finder.py sync --segments 1       # satu segmen (~20 ribu blok)
 python3 finder.py sync --days 2           # cuma N hari, bukan dari genesis
@@ -147,8 +161,10 @@ udah ditutup dan dihargai), bukan volume × fee tier.
 
 ## Etalase web
 
-Folder `web/`. Di Vercel, Root Directory = `elysium_wallet_finder/web`,
-framework Other. Blob store + `PUBLISH_KEY`, terus di Settings paste
+Folder `web/`. Di Vercel, **Root Directory = `web`**, framework Other.
+(Dulu, waktu masih di dalam Capstone1, root-nya `elysium_wallet_finder/web`.
+Kalau project Vercel yang lama diarahkan ke repo ini, ganti root-nya ke `web`.)
+Blob store + `PUBLISH_KEY` di env Vercel, terus di Settings paste
 `https://<project>.vercel.app/api/publish?key=…`. Snapshot-nya
 `elywf/snapshot.json.gz` (beda path dari RH, biar satu store nggak nimpah).
 Yang ke-upload cuma alamat + angka. Label, notes, RPC nggak ikut.
@@ -202,7 +218,23 @@ Yang ke-upload cuma alamat + angka. Label, notes, RPC nggak ikut.
 
 ## Tes
 
+Dari root repo, Python 3.10+:
+
 ```bash
-python3 -m unittest discover -s elysium_wallet_finder/tests
-python3 -m unittest discover -s rh_wallet_finder/tests
+python3 -m unittest discover -s tests
 ```
+
+## Buat yang mau bantu
+
+- Clone repo ini, kerja di branch sendiri, buka PR ke `main`.
+- Sebelum PR: `python3 -m unittest discover -s tests`. Node cuma dipakai tes
+  fungsi Vercel di `web/api/` — kalau Node nggak ada, tes itu di-skip, sisanya
+  tetep jalan.
+- Jangan commit `.env`, `.venv/`, `data/*.db`, `data/worker.lock`, atau isi
+  `logs/`. Contoh setting ada di `.env.example`.
+- RPC key, `PUBLISH_KEY`, dan token Blob cuma di mesin lu atau di env Vercel.
+- App Streamlit-nya `streamlit_app.py`, dijalanin lewat `finder.py` atau
+  `Buka Wallet Finder.command`. Etalase publik ada di `web/` (Root Directory
+  Vercel = `web`).
+- Penghitung RPC (`rpcmeter.py`) nulis ke `~/.rpc-monitor`, sama kayak meter
+  di Capstone1. Nggak wajib. Tes nggak nulis ke situ.

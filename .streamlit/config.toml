@@ -1,4 +1,4 @@
-# Theme for rh_wallet_finder/streamlit_app.py (read when Streamlit runs from this folder;
+# Theme for streamlit_app.py (read when Streamlit runs from this folder;
 # `python3 finder.py` and "Buka Wallet Finder.command" both do).
 [theme]
 base = "dark"

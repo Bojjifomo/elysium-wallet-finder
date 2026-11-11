@@ -1121,7 +1121,7 @@ def settings():
     cfg = config.load_env()
     src = f" (from {cfg['RPC_SOURCE']})" if cfg["RPC_SOURCE"] not in ("", "settings") else ""
     with st.form("settings"):
-        st.caption("Saved to elysium_wallet_finder/.env on this computer only (git-ignored). Leave a field empty to keep it.")
+        st.caption("Saved to .env in this folder on this computer only (git-ignored). Leave a field empty to keep it.")
         rpc = st.text_input(f"RPC 1 · sync goes here first · now: {config.mask(cfg['RPC_URL']) or 'not set'}"
                             f"{src}", type="password", placeholder="https://rpc.elysium.kinetiq.xyz")
         call = st.text_input(f"RPC 2 · works alongside RPC 1 (Alchemy API key, or any RPC link) · now: "

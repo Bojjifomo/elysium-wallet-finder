@@ -1,6 +1,6 @@
 "use strict";
-// RH Wallet Finder, public board. Renders the snapshot the scanner publishes
-// (rh_wallet_finder/publish.py -> Vercel Blob -> /api/snapshot). Read-only:
+// Elysium Wallet Finder, public board. Renders the snapshot the scanner publishes
+// (publish.py -> Vercel Blob -> /api/snapshot). Read-only:
 // the same boards, filters and figures as the app, nothing personal.
 
 const BLUE = "57,135,229", RED = "230,103,103", STEPS = [0.16, 0.30, 0.44];

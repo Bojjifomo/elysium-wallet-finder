@@ -1,4 +1,4 @@
-"""Offline tests: python3 -m unittest discover -s rh_wallet_finder/tests"""
+"""Offline tests: python3 -m unittest discover -s tests"""
 import json
 import sys
 import tempfile

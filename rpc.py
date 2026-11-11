@@ -19,7 +19,12 @@ _meter = None
 
 
 def _meter_hit(url, outcome="ok", n=1):
-    """Count one request for the RPC Monitor (../rpc_monitor/meter.py). No meter there = no-op."""
+    """Count one request for the RPC Monitor.
+
+    The counter is vendored as rpcmeter.py (same file as Capstone1's
+    rpc_monitor/meter.py). It only appends counts under ~/.rpc-monitor and
+    never raises. Missing file or a test run = no-op.
+    """
     global _meter
     if _meter is None:
         _meter = False
@@ -29,8 +34,10 @@ def _meter_hit(url, outcome="ok", n=1):
             from pathlib import Path
             mod = sys.modules.get("rpc_meter")
             if mod is None:
-                path = Path(__file__).resolve().parents[1] / "rpc_monitor" / "meter.py"
+                path = Path(__file__).resolve().parent / "rpcmeter.py"
                 spec = importlib.util.spec_from_file_location("rpc_meter", path)
+                if spec is None or spec.loader is None:
+                    raise ImportError(path)
                 mod = importlib.util.module_from_spec(spec)
                 spec.loader.exec_module(mod)
                 sys.modules["rpc_meter"] = mod
@@ -38,7 +45,7 @@ def _meter_hit(url, outcome="ok", n=1):
         except Exception:
             pass
     if _meter:
-        _meter(os.environ.get("RPC_METER_BOT") or 'rh_wallet_finder', url, outcome, n)
+        _meter(os.environ.get("RPC_METER_BOT") or "elysium_wallet_finder", url, outcome, n)
 
 
 class RPCError(Exception):
@@ -99,7 +106,7 @@ def _range_hint(msg):
 class RPC:
     def __init__(self, url, workers=6, timeout=60):
         if not url:
-            raise RPCError("RPC_URL is empty. Paste your RPC link in Settings or in rh_wallet_finder/.env")
+            raise RPCError("RPC_URL is empty. Paste your RPC link in Settings or in .env")
         self.url = url
         self.host = urllib.parse.urlparse(url).hostname or "RPC"
         self.timeout = timeout
