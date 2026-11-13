@@ -9,3 +9,7 @@ logs/
 __pycache__/
 *.pyc
 .streamlit/secrets.toml
+*.db
+*.log
+.DS_Store
+node_modules/

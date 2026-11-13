@@ -237,4 +237,6 @@ python3 -m unittest discover -s tests
   `Buka Wallet Finder.command`. Etalase publik ada di `web/` (Root Directory
   Vercel = `web`).
 - Penghitung RPC (`rpcmeter.py`) nulis ke `~/.rpc-monitor`, sama kayak meter
-  di Capstone1. Nggak wajib. Tes nggak nulis ke situ.
+  di repo rpc-monitor. Nggak wajib. Tes nggak nulis ke situ. Mau pakai salinan
+  lain? Set `RPC_METER_PATH` (misal `~/Projects/src/rpc-monitor/meter.py`);
+  kalau filenya nggak ada, hitungnya diam saja.
