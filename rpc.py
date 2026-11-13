@@ -18,12 +18,22 @@ from concurrent.futures import ThreadPoolExecutor
 _meter = None
 
 
+def _meter_path():
+    """RPC_METER_PATH if set, else the vendored rpcmeter.py next to this file."""
+    from pathlib import Path
+    env = os.environ.get("RPC_METER_PATH")
+    if env:
+        return Path(env).expanduser()
+    return Path(__file__).resolve().parent / "rpcmeter.py"
+
+
 def _meter_hit(url, outcome="ok", n=1):
     """Count one request for the RPC Monitor.
 
-    The counter is vendored as rpcmeter.py (same file as Capstone1's
-    rpc_monitor/meter.py). It only appends counts under ~/.rpc-monitor and
-    never raises. Missing file or a test run = no-op.
+    The counter is vendored as rpcmeter.py (same file as the rpc-monitor
+    repo's meter.py). Set RPC_METER_PATH to use another copy (for example
+    ~/Projects/src/rpc-monitor/meter.py). It only appends counts under
+    ~/.rpc-monitor and never raises. Missing file or a test run = no-op.
     """
     global _meter
     if _meter is None:
@@ -34,7 +44,7 @@ def _meter_hit(url, outcome="ok", n=1):
             from pathlib import Path
             mod = sys.modules.get("rpc_meter")
             if mod is None:
-                path = Path(__file__).resolve().parent / "rpcmeter.py"
+                path = _meter_path()
                 spec = importlib.util.spec_from_file_location("rpc_meter", path)
                 if spec is None or spec.loader is None:
                     raise ImportError(path)
